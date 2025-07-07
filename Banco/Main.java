@@ -7,17 +7,37 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         ServicioBanFactory banco = new BancoFactory();
         List<Cliente> clientes = new ArrayList<>();
+        String nombreCiudad = "";
 
-        System.out.print("Ingrese el nombre de la ciudad donde está ubicado el banco: ");
-        String nombreCiudad = sc.nextLine();
+        while (true) {
+            System.out.print("Ingrese el nombre de la ciudad donde está ubicado el banco: ");
+            nombreCiudad = sc.nextLine().trim();
+            if (nombreCiudad.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                System.out.println("Ciudad de  " + nombreCiudad + "registrada correctamente!!");
+                break;
+            } else {
+                System.out.println("inválido. No debe contener números ni caracteres especiales.");
+            }
+        }
         Ciudad ciudad = new Ciudad(nombreCiudad);
         Banco miBanco = new Banco(ciudad);
 
         String continuar;
 
         do {
-            System.out.println("\nIngrese el nombre del cliente:");
-            String nombre = sc.nextLine();
+            String nombre = "";
+            while (true) {
+                System.out.println("Ingrese el nombre del cliente:");
+                String entrada = sc.nextLine().trim();
+
+                if (!entrada.isEmpty() && entrada.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                    nombre = entrada;
+                    break;
+                } else {
+                    System.out.println("Nombre invalido");
+                }
+            }
+
             Cliente cliente = new Cliente(nombre);
 
             System.out.println("Bienvenido, " + cliente.getNombre() + ". ¿Qué deseas hacer?");
@@ -37,7 +57,7 @@ public class Main {
                     System.out.println("4. CDT");
                     System.out.print("Opción: ");
                     int tipoProducto = sc.nextInt();
-                    sc.nextLine(); 
+                    sc.nextLine();
 
                     ProductoBancario producto = banco.crearProductoBancario(tipoProducto);
                     if (producto != null) {
@@ -62,7 +82,7 @@ public class Main {
                     System.out.println("3. Hipoteca");
                     System.out.print("Opción: ");
                     int tipoPrestamo = sc.nextInt();
-                    sc.nextLine(); 
+                    sc.nextLine();
 
                     Prestamos prestamo = banco.crearPrestamo(tipoPrestamo);
                     if (prestamo != null) {
@@ -89,7 +109,7 @@ public class Main {
 
             miBanco.registrarCliente(cliente);
 
-                System.out.print("\n¿Desea registrar otro cliente? (s/n): ");
+            System.out.print("\n¿Desea registrar otro cliente? (s/n): ");
             continuar = sc.nextLine();
 
         } while (continuar.equalsIgnoreCase("s"));
